@@ -1,5 +1,0 @@
-c:\code\TaskProcessor\AzureAccess\bin\Debug\AzureAccess.dll
-c:\code\TaskProcessor\AzureAccess\bin\Debug\AzureAccess.pdb
-c:\code\TaskProcessor\AzureAccess\obj\Debug\AzureAccess.csprojResolveAssemblyReference.cache
-c:\code\TaskProcessor\AzureAccess\obj\Debug\AzureAccess.dll
-c:\code\TaskProcessor\AzureAccess\obj\Debug\AzureAccess.pdb
