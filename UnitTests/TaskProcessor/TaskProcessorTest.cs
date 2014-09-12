@@ -22,18 +22,15 @@ namespace UnitTests.TaskProcessor
         [Test]
         public void GetRecentHashtagsTest()
         {
-            var queueMock = new Mock<IQueue>();
             var hashtag = new Hashtag{Name = "aaa"};
-            queueMock.Setup(m => m.Dequeue()).Returns(hashtag);
             var tableStoreMock = new Mock<ITableStore>();
             tableStoreMock.Setup(m => m.Add(It.IsAny<Hashtag>())).Returns(true);
             var twitterMock = new Mock<ITwitter>();
             twitterMock.Setup(m => m.GetLatestMessages(hashtag)).Returns(new List<string> {"a #twitter message", "a message"});
-            var taskProcessor = new HashtagProcessor(queueMock.Object, tableStoreMock.Object, twitterMock.Object);
+            var taskProcessor = new HashtagProcessor(tableStoreMock.Object, twitterMock.Object);
 
-            taskProcessor.GetRecentHashtags();
+            taskProcessor.GetRecentHashtags(hashtag);
 
-            queueMock.VerifyAll();
             tableStoreMock.VerifyAll();
             twitterMock.VerifyAll();
         }

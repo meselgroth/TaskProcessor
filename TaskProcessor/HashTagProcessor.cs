@@ -7,32 +7,28 @@ namespace TaskProcessor
 {
     public class HashtagProcessor
     {
-        private readonly IQueue _queue;
         private readonly ITableStore _tableStore;
         private readonly ITwitter _twitter;
 
-        public HashtagProcessor(IQueue queue, ITableStore tableStore, ITwitter twitter)
+        public HashtagProcessor(ITableStore tableStore, ITwitter twitter)
         {
-            _queue = queue;
             _tableStore = tableStore;
             _twitter = twitter;
         }
 
-        public void GetRecentHashtags()
+        public void GetRecentHashtags(Hashtag sourceHashTag)
         {
-            var hashTag = _queue.Dequeue();
+            var messages = _twitter.GetLatestMessages(sourceHashTag);
 
-            var messages = _twitter.GetLatestMessages(hashTag);
-
-            var hashtags = new List<Hashtag>();
+            var foundHashtags = new List<Hashtag>();
             foreach (var message in messages)
             {
-                hashtags.AddRange(message.Split(' ').Where(word => word.StartsWith("#")).Select(tag => new Hashtag { Name = tag }));
+                foundHashtags.AddRange(message.Split(' ').Where(word => word.StartsWith("#")).Select(tag => new Hashtag { Name = tag }));
             }
 
-            foreach (var relatedHashtags in hashtags.Distinct())
+            foreach (var foundHashtag in foundHashtags.Distinct())
             {
-                _tableStore.Add(relatedHashtags);
+                _tableStore.Add(foundHashtag);
             }
         }
     }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AzureAccess;
 using Microsoft.Azure.WebJobs;
 
 namespace TaskProcessor
@@ -20,10 +17,11 @@ namespace TaskProcessor
         }
 
         public static void ProcessQueueMessage(
-            [QueueTrigger("webjobsqueue")] string inputText,
-            [Blob("containername/blobname")] TextWriter writer)
+            [QueueTrigger("RecentTagQueue")] string hashtag,
+            [Table("RelatedTags")] IDictionary<Tuple<string,string>, Hashtag> table)
         {
-            writer.WriteLine(inputText);
+            var hashtagProcessor = new HashtagProcessor(new TableStore(table), new Twitter());
+            hashtagProcessor.GetRecentHashtags(new Hashtag{Name = hashtag});
         }
     }
 }

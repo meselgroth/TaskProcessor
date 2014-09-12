@@ -60,7 +60,9 @@
     <Compile Include="TaskProcessor\TaskProcessorTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -69,7 +71,7 @@
       <Name>AzureAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\TaskProcessor\TaskProcessor.csproj">
-      <Project>{168B1B48-3C74-4793-888C-49989E749CCB}</Project>
+      <Project>{168b1b48-3c74-4793-888c-49989e749ccb}</Project>
       <Name>TaskProcessor</Name>
     </ProjectReference>
   </ItemGroup>
