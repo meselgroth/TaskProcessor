@@ -29,7 +29,7 @@ namespace UnitTests.TaskProcessor
             twitterMock.Setup(m => m.GetLatestMessages(hashtag)).Returns(new List<string> {"a #twitter message", "a message"});
             var taskProcessor = new HashtagProcessor(tableStoreMock.Object, twitterMock.Object);
 
-            taskProcessor.GetRecentHashtags(hashtag);
+            taskProcessor.AddRecentHashtagsToTable(hashtag);
 
             tableStoreMock.VerifyAll();
             twitterMock.VerifyAll();

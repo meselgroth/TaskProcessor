@@ -16,7 +16,7 @@ namespace TaskProcessor
             _twitter = twitter;
         }
 
-        public void GetRecentHashtags(Hashtag sourceHashTag)
+        public void AddRecentHashtagsToTable(Hashtag sourceHashTag)
         {
             var messages = _twitter.GetLatestMessages(sourceHashTag);
 

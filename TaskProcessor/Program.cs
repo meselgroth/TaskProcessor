@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using AzureAccess;
 using Microsoft.Azure.WebJobs;
+using Microsoft.WindowsAzure.Storage.Queue;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace TaskProcessor
 {
-    // To learn more about Windows Azure WebJobs start here http://go.microsoft.com/fwlink/?LinkID=320976
     internal class Program
     {
-        // Please set the following connectionstring values in app.config
-        // AzureWebJobsDashboard and AzureWebJobsStorage
+        private const string QueueName = "RecentTagQueue";
+        
         private static void Main()
         {
             var host = new JobHost();
@@ -17,11 +17,20 @@ namespace TaskProcessor
         }
 
         public static void ProcessQueueMessage(
-            [QueueTrigger("RecentTagQueue")] string hashtag,
-            [Table("RelatedTags")] IDictionary<Tuple<string,string>, Hashtag> table)
+            [QueueTrigger(QueueName)] string hashtag, 
+            [Table(TableStore.TableName)]CloudTable table)
         {
+            Console.WriteLine("received hashtag:" + hashtag);
             var hashtagProcessor = new HashtagProcessor(new TableStore(table), new Twitter());
-            hashtagProcessor.GetRecentHashtags(new Hashtag{Name = hashtag});
+            hashtagProcessor.AddRecentHashtagsToTable(new Hashtag { Name = hashtag });
+        }
+
+        public static void AddToRecentTagQueue(string hashtag, [Queue(QueueName)]CloudQueue queue, [Table(TableStore.TableName)]CloudTable table)
+        {
+            queue.CreateIfNotExists();
+            table.CreateIfNotExists();
+
+            queue.AddMessage(new CloudQueueMessage(hashtag));
         }
     }
 }
