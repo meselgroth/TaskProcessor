@@ -1,4 +1,4 @@
-﻿namespace AzureAccess
+namespace ApiLayer
 {
     public class Hashtag
     {

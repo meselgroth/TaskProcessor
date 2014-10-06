@@ -1,4 +1,5 @@
 ﻿using System;
+using ApiLayer;
 using AzureAccess;
 using Microsoft.Azure.WebJobs;
 using Microsoft.WindowsAzure.Storage.Queue;

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using ApiLayer;
 using AzureAccess;
 using Moq;
 using NUnit.Framework;
@@ -22,14 +19,15 @@ namespace UnitTests.TaskProcessor
         [Test]
         public void GetRecentHashtagsTest()
         {
-            var hashtag = new Hashtag{Name = "aaa"};
+            var sourceHashTag = new Hashtag { Name = "aaa" };
+            const string foundTag = "twitter";
             var tableStoreMock = new Mock<ITableStore>();
-            tableStoreMock.Setup(m => m.Add(It.IsAny<Hashtag>())).Returns(true);
+            tableStoreMock.Setup(m => m.Add(sourceHashTag, It.Is<Hashtag>(h => h.Name == foundTag))).Returns(true);
             var twitterMock = new Mock<ITwitter>();
-            twitterMock.Setup(m => m.GetLatestMessages(hashtag)).Returns(new List<string> {"a #twitter message", "a message"});
+            twitterMock.Setup(m => m.GetLatestMessages(sourceHashTag)).Returns(new List<string> { "a #twitter message", "a message" });
             var taskProcessor = new HashtagProcessor(tableStoreMock.Object, twitterMock.Object);
 
-            taskProcessor.AddRecentHashtagsToTable(hashtag);
+            taskProcessor.AddRecentHashtagsToTable(sourceHashTag);
 
             tableStoreMock.VerifyAll();
             twitterMock.VerifyAll();

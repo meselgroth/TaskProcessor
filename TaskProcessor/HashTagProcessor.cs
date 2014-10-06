@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ApiLayer;
 using AzureAccess;
 
 namespace TaskProcessor
@@ -23,12 +24,12 @@ namespace TaskProcessor
             var foundHashtags = new List<Hashtag>();
             foreach (var message in messages)
             {
-                foundHashtags.AddRange(message.Split(' ').Where(word => word.StartsWith("#")).Select(tag => new Hashtag { Name = tag }));
+                foundHashtags.AddRange(message.Split(' ').Where(word => word.StartsWith("#")).Select(tag => new Hashtag { Name = tag.Substring(1, tag.Length - 1) }));
             }
 
             foreach (var foundHashtag in foundHashtags.Distinct())
             {
-                _tableStore.Add(foundHashtag);
+                _tableStore.Add(sourceHashTag, foundHashtag);
             }
         }
     }

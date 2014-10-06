@@ -2,6 +2,6 @@
 {
     public interface IQueue
     {
-        Hashtag Dequeue();
+        HashtagEntity Dequeue();
     }
 }

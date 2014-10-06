@@ -2,7 +2,7 @@
 {
     public class Queue : IQueue
     {
-        public Hashtag Dequeue()
+        public HashtagEntity Dequeue()
         {
             throw new System.NotImplementedException();
         }
